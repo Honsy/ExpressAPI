@@ -8,22 +8,37 @@ var util = require('./../util')
 
 
 var connection = mysql.createConnection(db.mysql)
-connection.connect()
+try {
+  connection.connect()
+} catch (error) {
+  console.log(error)
+}
 
-/* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
+/* 拉取用户信息 */
 router.get('/info',function(req,res,next){
     let token = req.get('X-Token')
     var username = util.aesDecrypt(token)
+    connection.query(user.queryUser,[username],(err,result)=>{
+      // 如果查无此人
+      if(result.length == 0){
+        res.send(util.errorCode(401,err,"用户不存在"))
+        res.end()
+        return;
+      }
+      var user = result[0]
+      res.send(util.successCode(user,""))
+      res.end()
 
-    res.send(username)
-    res.end()
+    })
+
+    
 })
 
-/* GET users listing. */
+/* 登录 */
 router.post('/login', function(req, res, next) {
   let params = req.body
   connection.query(user.queryUser,[params.username],(err,result)=>{
@@ -48,14 +63,11 @@ router.post('/login', function(req, res, next) {
 
 
 
-/* POST users listing. */
+/* 注册*/
 router.post('/register', function(req, res, next) {
   let params = req.body
   connection.query(user.queryUser,[params.username],(err,result)=>{
-    console.log(err,result)
     if (result.length==0) {
-      var password = util.md5(params.password)
-
       connection.query(user.insert,[params.username,password],(err,result)=>{
         if (!err) {
           res.send(util.successCode(null,'注册成功！'))
@@ -77,6 +89,5 @@ router.post('/register', function(req, res, next) {
   // })
   // res.send(params);
 });
-
 
 module.exports = router;
