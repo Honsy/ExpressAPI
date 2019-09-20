@@ -10,5 +10,4 @@ module.exports = {
     sale:0,
     saleprice:0,
     create:'',
-    createtime:''
 }

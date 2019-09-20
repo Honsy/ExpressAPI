@@ -13,9 +13,8 @@ module.exports = {
         ormObject = Object.assign(product,params)
         // 创建人
         ormObject.create = "洪少远"
-        ormObject.createtime = Date.now()
 
-        db.insert(connection,productsql.addProduct,ormObject).then(res=>{
+        db.insert(connection,productsql.addProduct,ormObject).then(result=>{
             console.log(res)
             res.send('succ'),
             res.end()
@@ -33,11 +32,12 @@ module.exports = {
         let params = req.body
         let connection = db.connection()
 
-        db.insert(connection,productsql.queryAll).then(res=>{
+        db.insert(connection,productsql.queryAll).then(result=>{
             res.send(util.successCode(result));
             res.end()
         }).catch(error=>{
-            res.send(util.errorCode(500,err,"服务器错误！"))
+            console.log(error)
+            res.send(util.errorCode(500,error,"服务器错误！"))
             res.end()
             return;
         })
