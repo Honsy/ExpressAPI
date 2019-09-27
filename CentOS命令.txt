@@ -1,0 +1,19 @@
+systemctl  restart firewalld #重启防火墙
+firewall-cmd --zone=public --add-port=22/tcp --permanent #防火墙开放端口
+firewall-cmd --zone=public --list-ports #查询已开放端口
+systemctl restart vsftpd #重启FTP
+
+
+#NGINX 配置
+./configure \
+--prefix=/usr/local/nginx \
+--pid-path=/var/run/nginx/nginx.pid \
+--lock-path=/var/lock/nginx.lock \
+--error-log-path=/var/log/nginx/error.log \
+--http-log-path=/var/log/nginx/access.log \
+--with-http_gzip_static_module \
+--http-client-body-temp-path=/var/temp/nginx/client \
+--http-proxy-temp-path=/var/temp/nginx/proxy \
+--http-fastcgi-temp-path=/var/temp/nginx/fastcgi \
+--http-uwsgi-temp-path=/var/temp/nginx/uwsgi \
+--http-scgi-temp-path=/var/temp/nginx/scgi

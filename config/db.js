@@ -11,6 +11,14 @@ db.insert = function(connection, sql, paras){
                 resolve(results)
             }
         })
+
+        connection.on('error',(err)=>{
+            console.log(err)
+            if(err.code === "PROTOCOL_ENQUEUE_AFTER_QUIT"){
+                console.log("/!\\ Cannot establish a connection with the database. /!\\ ("+err.code+")");
+                return db.connection();
+            }
+        })
     })
 
     return promise

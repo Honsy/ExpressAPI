@@ -16,4 +16,8 @@ router.post('/login', userController.login);
 /* 注册*/
 router.post('/register', userController.register);
 
+/* 小程序登录 */
+router.get('/wxlogin', userController.wxlogin);
+
+
 module.exports = router;

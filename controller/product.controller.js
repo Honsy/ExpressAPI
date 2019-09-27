@@ -36,7 +36,6 @@ module.exports = {
             res.send(util.successCode(result));
             res.end()
         }).catch(error=>{
-            console.log(error)
             res.send(util.errorCode(500,error,"服务器错误！"))
             res.end()
             return;

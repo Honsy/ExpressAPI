@@ -5,15 +5,26 @@ var util = require('./../util')
 
 // 前台用户
 module.exports = {
+
+    // 小程序登录
+    wxlogin:function(req,res,next){
+        let params = req.query
+        
+        res.send(params)
+        res.end()
+    },
+
     // 前台登录
     login:function(req,res,next){
         let params = req.body
         let connection = db.connection()
 
-        db.insert(connection,user.queryUser,[params.username]).then(res=>{
+        db.insert(connection,user.queryUser,[params.username]).then(result=>{
             if (result.length==0) {
-                res.send(util.errorCode(401,err,"用户名密码错误！"))
+                res.send(util.errorCode(401,null,"用户名密码错误！"))
                 res.end()
+                db.close(connection)
+
               }else{
                 var password = util.md5(params.password)
                 // var password = params.password
@@ -22,17 +33,20 @@ module.exports = {
                 if (user.password == password) {
                   res.send(util.successCode(user,"登录成功！"))
                   res.end()
+                  db.close(connection)
                 }else{
-                  res.send(util.errorCode(401,err,"用户名密码错误！"))
+                  res.send(util.errorCode(401,null,"用户名密码错误！"))
                   res.end()
+                  db.close(connection)
+
                 }
               }
         }).catch(err=>{
-            res.send(util.errorCode(401,err,"服务端错误！"))
+            res.send(util.errorCode(401,err.message,"服务端错误！"))
             res.end()
-        })
+            db.close(connection)
 
-        db.close()
+        })
         return;
 
     },

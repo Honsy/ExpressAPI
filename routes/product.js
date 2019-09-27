@@ -1,7 +1,7 @@
 
 var express = require('express')
 var router = express.Router()
-var productController = require('./../../controller/product.controller')
+var productController = require('./../controller/product.controller')
 
 // 查询全部商品
 router.get('', productController.queryProduct);
