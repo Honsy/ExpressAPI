@@ -3,6 +3,15 @@ firewall-cmd --zone=public --add-port=22/tcp --permanent #防火墙开放端口
 firewall-cmd --zone=public --list-ports #查询已开放端口
 systemctl restart vsftpd #重启FTP
 
+wget 获取资源
+tar -zxvf #解压 需要下载对应工具 若未使用Gzip压缩 则为tar -xvf
+
+ln -s 命令路径 bin路径  #添加软连接 全局访问  若目录不同 则需填写绝对路径
+
+#端口
+lsof -i:端口号
+
+netstat -tunlp|grep 端口号
 
 #NGINX 配置
 ./configure \
