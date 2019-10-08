@@ -47,33 +47,30 @@ module.exports = {
             shopcart.uid = user.id
             // 查找该用户是否有该商品
             db.insert(connection,shopcartSql.queryShopcartWithUidAndProduct,[shopcart.uid,shopcart.productid]).then(result=>{
-                // 找到 修改
-                res.send(util.errorCode(403,null,'请勿重复添加！'))
-                res.end()
-                db.close(connection)
-                // shopcart.num++
-                // db.insert(connection,shopcartSql.updateShopcartNum,[shopcart.num,shopcart.uid]).then(result=>{
-                //     res.send(util.successCode(null,'添加成功！'))
-                //     res.end()
-                //     db.close(connection)
-                // }).catch(err=>{
-                //     res.send(util.errorCode(404,null,'服务器错误！'))
-                //     res.end()
-                //     db.close(connection)
-                // })
-
+                
+                if (result.length>0) {
+                    // 找到
+                    res.send(util.errorCode(403,null,'请勿重复添加！'))
+                    res.end()
+                    db.close(connection)
+                } else {
+                    // 未找到 插入
+                    db.insert(connection,shopcartSql.insertSql,[shopcart.uid,shopcart.productid,shopcart.num,shopcart.status]).then(result=>{
+                        console.log(result)
+                        res.send(util.successCode(null,'添加成功！'))
+                        res.end()
+                        db.close(connection)
+                    }).catch(err=>{
+                        res.send(util.errorCode(400,err,'添加失败！'))
+                        res.end()
+                        db.close(connection)
+                    })  
+                }
             }).catch(err=>{
                 // 未找到 插入
-                db.insert(connection,shopcartSql.insertSql,[shopcart.uid,shopcart.productid,shopcart.num,shopcart.status]).then(result=>{
-                    console.log(result)
-                    res.send(util.successCode(null,'添加成功！'))
-                    res.end()
-                    db.close(connection)
-                }).catch(err=>{
-                    res.send(util.errorCode(400,err,'添加失败！'))
-                    res.end()
-                    db.close(connection)
-                })  
+                res.send(util.errorCode(401,err,'服务器错误！'))
+                res.end()
+                db.close(connection)
             })
         }).catch(err=>{
             res.send(util.errorCode(401,null,'服务器错误！'))
