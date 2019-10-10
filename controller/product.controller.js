@@ -16,15 +16,17 @@ module.exports = {
 
         db.insert(connection,productsql.addProduct,ormObject).then(result=>{
             console.log(res)
-            res.send('succ'),
+            res.send(util.successCode(null,'添加成功'))
             res.end()
+            db.close(connection);
+
         }).catch(err=>{
             console.log(err)
-            res.send('err'),
+            res.send(util.errorCode(400,null,'添加失败'))
             res.end()
+            db.close(connection);
+
         })
- 
-        db.close(connection);
         return;
     },
     // 查询商品

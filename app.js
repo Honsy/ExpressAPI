@@ -8,6 +8,10 @@ var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
 var loginRouter = require('./routes/login');
 
+// 静态资源
+var serveStatic = require('serve-static')
+
+
 var app = express();
 
 //设置允许跨域访问该服务.
@@ -33,7 +37,12 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+
+// app.use('/upload', express.static('upload'))
+app.use('/upload', serveStatic(path.join(__dirname, 'upload'),{
+  maxAge: '1d',
+}))
+
 
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
@@ -53,5 +62,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// app.use('/upload', express.static('upload'))
+
+// app.use('/upload', express.static(path.join(__dirname, 'upload')))
 
 module.exports = app;
