@@ -1,5 +1,6 @@
 
-
+var sql = require('./../sql/sql')
+var db = require('./../config/db')
 
 const algorithm = 'aes-192-cbc';
 const password = '158654861sdfeqsfss';
@@ -68,11 +69,22 @@ function aesDecrypt(data) {
     return decrypted;
 }
 
+// 查询表的总数
+function selectTableCount(tablename){
+    let connection = db.connection()
+
+    var strsql = sql.selectcount(tablename)
+    return db.insert(connection,strsql).catch(err=>{
+
+    })
+}
+
 
 module.exports = {
     errorCode,
     successCode,
     md5,
     aesEncrypt,
-    aesDecrypt
+    aesDecrypt,
+    selectTableCount
 }

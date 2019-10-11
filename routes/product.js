@@ -4,19 +4,18 @@ var router = express.Router()
 var productController = require('./../controller/product.controller')
 
 // 查询全部商品
-router.get('', productController.queryProduct);
+router.get('/:page/:count', productController.queryProduct);
 
 // 增加某个商品
 router.post('',productController.addProduct)
 
 // 修改某个商品
-router.put('',function(req,res,next){
+router.put('',productController.updateProduct)
 
-})
+// 彻底删除某个商品
+router.delete('',productController.deleteProduct)
 
-// 删除某个商品
-router.delete('',function(req,res,next){
-
-})
+// 下架某个商品
+router.post('/remove',productController.removeProduct)
 
 module.exports = router
