@@ -79,6 +79,14 @@ function selectTableCount(tablename){
     })
 }
 
+// 包含''空字符串
+function strIsEmpty(str){
+    if (typeof str == undefined || str.length == 0 || str==null || str == '<null>') {
+      return true
+    }
+    return false
+}
+
 
 module.exports = {
     errorCode,
@@ -86,5 +94,6 @@ module.exports = {
     md5,
     aesEncrypt,
     aesDecrypt,
-    selectTableCount
+    selectTableCount,
+    strIsEmpty
 }

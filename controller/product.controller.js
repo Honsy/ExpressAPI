@@ -15,6 +15,10 @@ module.exports = {
         // 创建人
         ormObject.create = "洪少远"
 
+
+        // 处理多张详情图片
+        ormObject.detailimgs = mergeDetailImg(ormObject.detailimgs)
+
         db.insert(connection,productsql.addProduct,ormObject).then(result=>{
             console.log(res)
             res.send(util.successCode(null,'添加成功'))
@@ -43,9 +47,18 @@ module.exports = {
         // 查询
         db.insert(connection,productsql.queryAll,[(currentPage-1)*pageNumber,pageNumber]).then(result=>{
             
+            //处理result
+            const handleResult = result.map((item,index)=>{
+                if (!util.strIsEmpty(item.detailimgs)) {
+                    item.detailimgs = item.detailimgs.split(',')
+                }
+                return item
+
+            })
+
             // 携带分页参数
             var resjson = {
-                list:result,
+                list:handleResult,
                 page:{
                     currentPage:currentPage,
                     pageNumber:pageNumber,
@@ -74,8 +87,16 @@ module.exports = {
         // 创建人
         ormObject.create = "洪少远"
 
+        console.log(this)
+
+        // 处理多张详情图片
+        ormObject.detailimgs = mergeDetailImg(ormObject.detailimgs)
+
         var id = ormObject.id
+
+        // 删除非必须字段
         delete(ormObject["id"]);
+        delete(ormObject["createtime"])
 
         db.insert(connection,productsql.updateProduct,[ormObject,id]).then(result=>{
             console.log(res)
@@ -123,5 +144,21 @@ module.exports = {
             db.close(connection);
         })
         return;
+    },
+}
+
+// common function
+function mergeDetailImg(array) {
+    var detailUrl = '';
+
+    if (array.length>0) {
+        array.map((item,index)=>{
+              if (index == array.length -1) {
+                detailUrl += item 
+              } else {
+                detailUrl += item +','
+              }
+        })
     }
+    return detailUrl
 }
