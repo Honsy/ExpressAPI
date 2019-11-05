@@ -1,5 +1,7 @@
 
 var sql = require('./../sql/sql')
+var usersql = require('./../sql/user.app.sql')
+
 var db = require('./../config/db')
 
 const algorithm = 'aes-192-cbc';
@@ -69,22 +71,27 @@ function aesDecrypt(data) {
     return decrypted;
 }
 
-// 查询表的总数
-function selectTableCount(tablename){
-    let connection = db.connection()
-
-    var strsql = sql.selectcount(tablename)
-    return db.insert(connection,strsql).catch(err=>{
-
-    })
-}
-
 // 包含''空字符串
 function strIsEmpty(str){
     if (typeof str == undefined || str.length == 0 || str==null || str == '<null>') {
       return true
     }
     return false
+}
+
+// -------------------------------以下为业务层工具方法
+// 用于返回单个用户对象
+function getUserWithUsername(connection,username) {
+
+    return db.insert(connection,usersql.queryUser,[username])
+}
+
+// 查询表的总数
+function selectTableCount(tablename){
+    let connection = db.connection()
+
+    var strsql = sql.selectcount(tablename)
+    return db.insert(connection,strsql)
 }
 
 
@@ -95,5 +102,6 @@ module.exports = {
     aesEncrypt,
     aesDecrypt,
     selectTableCount,
+    getUserWithUsername,
     strIsEmpty
 }

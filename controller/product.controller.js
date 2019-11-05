@@ -33,6 +33,29 @@ module.exports = {
         })
         return;
     },
+    // 查询某件商品
+    queryOneProduct:function(req,res,next) {
+        let params = req.params
+        let connection = db.connection()
+        const id = params.id
+
+        db.insert(connection,productsql.queryOne,[id]).then(result=>{
+            var product = result[0]
+            if (!util.strIsEmpty(product.detailimgs)) {
+                product.detailimgs = product.detailimgs.split(',')
+            }
+            
+            res.send(util.successCode(product,'查询成功'))
+            res.end()
+            db.close(connection)
+
+        }).catch(err=>{
+            res.send(util.errorCode(500,null,'服务器错误'))
+            res.end()
+            db.close(connection)
+        })
+        
+    },
     // 查询商品
     queryProduct:async function(req,res,next) {
         let params = req.params
@@ -148,9 +171,9 @@ module.exports = {
 }
 
 // common function
+// 合并图片数组
 function mergeDetailImg(array) {
     var detailUrl = '';
-
     if (array.length>0) {
         array.map((item,index)=>{
               if (index == array.length -1) {

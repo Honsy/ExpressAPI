@@ -6,6 +6,8 @@ var usersRouter = require('./users');
 var keyvalueRouter = require('./keyvalue');
 var productRouter = require('./product')
 var shopcartRouter = require('./shopcart')
+var addressRouter = require('./address')
+
 var axios = require('axios')
 var util = require('./../util')
 var config = require('./../config')
@@ -30,6 +32,9 @@ router.use('/keyvalue', keyvalueRouter);
 router.use('/product',productRouter)
 // 购物车相关
 router.use('/shopcart',shopcartRouter)
+// 收货地址
+router.use('/address',addressRouter)
+
 
 // 请求sm.ms图床Token
 router.post('/smlogin',function(req,res,next){

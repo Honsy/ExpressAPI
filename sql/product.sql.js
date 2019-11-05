@@ -1,5 +1,6 @@
 module.exports = {
-    queryAll:"select * from product order by createtime desc limit ?,?",
+    queryAll:"SELECT * FROM product ORDER BY createtime desc limit ?,?",
+    queryOne:"SELECT * FROM product WHERE id = ?",
     addProduct:"INSERT INTO product SET ?",
     updateProduct:"UPDATE product SET ? WHERE id = ?",
     deleteProduct:'DELETE FROM product WHERE id = ?',
